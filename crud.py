@@ -36,6 +36,15 @@ def get_flower_by_id(session: Session, id):
     flower = session.query(Flor).filter_by(id=id).first()
     return flower
 
+
+def get_all_purchases(session: Session):
+    purchase = session.query(Compra).all()
+    return purchase
+
+def get_purchase(session: Session, id):
+    purchase = session.query(Compra).filter_by(id=id).first()
+    return purchase
+
 # Create
 def create_client(session: Session, name, email):
     client = Cliente(name=name, email=email)
@@ -50,8 +59,17 @@ def create_family(session: Session, name):
 
 
 def create_flower(session: Session, name, sci_name, family_name):
-    flower = Flor(name=name, sci_name=sci_name, family=get_family(family_name).id)
+    family = get_family(session, family_name)
+    flower = Flor(name=name, sci_name=sci_name, family=family)
     session.add(flower)
+    session.commit()
+
+
+def create_purchase(session: Session, payment_method, price, client_name, flower_name):
+    client = get_client_by_name(session, client_name).id
+    flower = get_flower_by_name(session, flower_name).id
+    purchase = Compra(payment_method=payment_method, price=price, client=client, flower=flower)
+    session.add(purchase)
     session.commit()
 
 
@@ -89,23 +107,50 @@ def update_flower(session: Session, flower_name, new_name=None, new_sci_name=Non
     session.commit()
 
 
+def update_purchase(session: Session, purchase_id, new_payment_method=None, new_price=None, new_client_name=None, new_flower_name=None):
+    purchase = get_purchase(purchase_id)
+    if new_payment_method == None:
+        new_payment_method = purchase.payment_method
+    if new_price == None:
+        new_price = purchase.price
+    if new_client_name == None:
+        new_client_name = purchase.client_name
+    if new_flower_name == None:
+        new_flower_name = purchase.flower_name
+
+    purchase.payment_method = new_payment_method
+    purchase.price = new_price
+    purchase.client_name = new_client_name
+    purchase.flower_name = new_flower_name
+    session.commit()
+
+
 # Delete
 def delete_client_by_id(session: Session, client_id):
     client = get_client_by_id(session, client_id)
     session.delete(client)
     session.commit()
 
+
 def delete_client_by_name(session: Session, name):
     client = get_client_by_name(session, name)
     session.delete(client)
     session.commit()
 
+
 def delete_family(session: Session, family_name):
     family = get_family(session, family_name)
     session.delete(family)
     session.commit()
-    
+
+
 def delete_flower(session: Session, name):
     flower = get_flower_by_name(session, name)
     session.delete(flower)
+    session.commit()
+
+
+def delete_purchase(session: Session, purchase_id):
+    purchase = get_purchase(purchase_id)
+    session.delete(purchase)
     session.commit()
