@@ -10,5 +10,5 @@ session = Session()
 Base = declarative_base()
 Base.metadata.create_all(bind=db)
 
-#crud.get_all_purchases(session)
-crud.create_purchase(session, "PIX", 100.10, "Angélica meu amor", "Orquidea")
+# Metodos CRUD
+crud.update_client(session=session, client_name="Angelica", email="teste@gmail.com")

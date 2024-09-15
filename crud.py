@@ -76,13 +76,10 @@ def create_purchase(session: Session, payment_method, price, client_name, flower
 # Update
 def update_client(session: Session, client_name, name=None, email=None):
     client = get_client_by_name(session, client_name)
-    if name == None:
-        name = client.name
-    if email == None:
-        email = client.email
-
-    client.name = name
-    client.email = email
+    if name != None:
+        client.name = name
+    if email != None:
+        client.email = email
 
     session.commit()
 
@@ -94,34 +91,27 @@ def update_family(session: Session, family, name):
 
 def update_flower(session: Session, flower_name, new_name=None, new_sci_name=None, new_family_name=None):
     flower = get_flower_by_name(session, flower_name)
-    if new_name == None:
-        new_name = flower.new_name
-    if new_sci_name == None:
-        new_sci_name = flower.new_sci_name
-    if new_family_name == None:
-        new_family_name = flower.family
+    if new_name != None:
+        flower.name = new_name
+    if new_sci_name != None:
+        flower.sci_name = new_sci_name
+    if new_family_name != None:
+        flower.family = new_family_name
 
-    flower.name = new_name
-    flower.sci_name = new_sci_name
-    flower.family = new_family_name
     session.commit()
 
 
 def update_purchase(session: Session, purchase_id, new_payment_method=None, new_price=None, new_client_name=None, new_flower_name=None):
     purchase = get_purchase(purchase_id)
-    if new_payment_method == None:
-        new_payment_method = purchase.payment_method
-    if new_price == None:
-        new_price = purchase.price
-    if new_client_name == None:
-        new_client_name = purchase.client_name
-    if new_flower_name == None:
-        new_flower_name = purchase.flower_name
+    if new_payment_method != None:
+        purchase.payment_method = new_payment_method
+    if new_price != None:
+        purchase.price = new_price
+    if new_client_name != None:
+        purchase.client_name = new_client_name
+    if new_flower_name != None:
+        purchase.flower_name = new_flower_name
 
-    purchase.payment_method = new_payment_method
-    purchase.price = new_price
-    purchase.client_name = new_client_name
-    purchase.flower_name = new_flower_name
     session.commit()
 
 
